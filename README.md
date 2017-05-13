@@ -8,7 +8,7 @@ indispensable pour une meilleure lecture du code sur la branch [develop](https:/
   - [ ] Administration - Statistique
   - [ ] Administration - Commande
   - [ ] Administration - Administation
-  - [ ] Administration - Evenement
+  - [x] Administration - Evenement
   - [ ] Administration - Jeu
   
 - Tâche publique:
