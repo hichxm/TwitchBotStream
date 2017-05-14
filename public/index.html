@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Twitch Bot Stream</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style media="screen">
+    .active {
+      background-color: #f5f5f5 !important;
+      color: #000000 !important;
+      border-color: #ddd !important;
+    }
+    .dropdown {
+      display: block !important;
+    }
+  </style>
+</head>
+
+<body class="container">
+  <br><br>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Twitch Bot Stream</a>
+      </div>
+      <p class="navbar-text"><span id="lang_admin_administration"></span> (<span id="config_bot_name"></span>)</p>
+    </div>
+  </nav>
+  <div class="row">
+    <div class="col-md-9" id="admin_MainPanel">
+
+    </div>
+    <div class="col-md-3" id="admin_Navigation">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title" id="lang_nav_title"></h3>
+        </div>
+        <div class="list-group">
+          <a href="#administration" class="list-group-item active" id="nav_link"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <span id="lang_nav_admin"></span></a>
+          <a href="#stats" class="list-group-item" id="nav_link"><i class="fa fa-info" aria-hidden="true"></i> <span id="lang_nav_statistic"></span></a>
+          <a href="#command" class="list-group-item" id="nav_link"><i class="fa fa-list-ul" aria-hidden="true"></i> <span id="lang_nav_command"></span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="/js/all.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    TwitchBotStream.init();
+    TwitchBotStream.languageInit();
+    TwitchBotStream.administration();
+  </script>
+</body>
+
+</html>
