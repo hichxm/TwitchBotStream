@@ -1,0 +1,131 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><span id="lang_panel_command_event"></span></h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+
+      <div class="col-md-3">
+        <fieldset id="group1">
+          <div class="radio">
+            <label>
+            <input type="radio" name="group1" id="panel_command_action_join" value="onJoin"> <span id="lang_panel_command_action_join"></span>
+          </label>
+            <label>
+            <input type="radio" name="group1" id="panel_command_action_leave" value="onBanned"> <span id="lang_panel_command_action_leave"></span>
+          </label>
+          </div>
+        </fieldset>
+      </div>
+      <div class="col-md-9">
+        <div class="input-group">
+          <input type="text" class="form-control" id="panel_command_action_message" placeholder="Hello ${username}...">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" id="lang_panel_command_add"></button>
+          </span>
+        </div>
+        <fieldset id="group2">
+          <div class="radio">
+            <label>
+            <input type="radio" name="group2" id="panel_command_command_method_me" value="panel_command_method_me"><span id="lang_panel_command_method_me"></span>
+          </label>
+            <label>
+            <input type="radio" name="group2" id="panel_command_method_chat" value="panel_command_method_chat"><span id="lang_panel_command_method_chat"></span>
+          </label>
+            <label>
+            <input type="radio" name="group2" id="panel_command_method_whisper" value="panel_command_method_whisper"><span id="lang_panel_command_method_whisper"></span>
+          </label>
+          </div>
+        </fieldset>
+      </div>
+      <div class="col-md-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th id="lang_panel_command_event_event"></th>
+              <th id="lang_panel_command_event_method"></th>
+              <th id="lang_panel_command_event_result"></th>
+              <th id="lang_panel_command_event_option"></th>
+            </tr>
+          </thead>
+          <tbody id="panel_command_event_table">
+
+
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><span id="lang_panel_command_command"></span></h3>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+
+      <div class="col-md-3">
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1">!</span>
+          <input type="text" class="form-control" id="panel_command_command_input_1" placeholder="command">
+        </div>
+        <fieldset id="group3">
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="group3" id="lang_panel_command_command_modo_check" value=""><span id="lang_panel_command_command_modo">Moderateur</span>
+            </label>
+            <label>
+              <input type="checkbox" name="group3" id="lang_panel_command_command_user_check" value=""><span id="lang_panel_command_command_user">User</span>
+            </label>
+            <label>
+              <input type="checkbox" name="group3" id="lang_panel_command_command_owner_check" value=""><span id="lang_panel_command_command_owner">Streamer</span>
+            </label>
+          </div>
+
+        </fieldset>
+      </div>
+      <div class="col-md-9">
+        <div class="input-group">
+          <input type="text" class="form-control" id="panel_command_command_input_2" placeholder="Im result of command...">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button" id="lang_panel_command_command_add"></button>
+          </span>
+        </div>
+        <fieldset id="group3">
+
+          <div class="radio">
+            <label>
+              <input type="radio" name="group3" id="lang_panel_command_event_me_radio" value="panel_command_event_me"><span id="lang_panel_command_event_me"></span>
+            </label>
+            <label>
+              <input type="radio" name="group3" id="lang_panel_command_event_chat_radio" value="panel_command_event_chat"><span id="lang_panel_command_event_chat"></span>
+            </label>
+            <label>
+              <input type="radio" name="group3" id="lang_panel_command_event_whisper_radio" value="panel_command_event_whisper"><span id="lang_panel_command_event_whisper"></span>
+            </label>
+          </div>
+
+        </fieldset>
+      </div>
+      <div class="col-md-12">
+        <table class="table table-bordered">
+          <thead>
+            <th id="lang_panel_command_command_command"></th>
+            <th id="">Method</th>
+            <th id="lang_panel_command_command_result"></th>
+            <th id="lang_panel_command_command_user">User</th>
+            <th id="lang_panel_command_command_modo">Moderateur</th>
+            <th id="lang_panel_command_command_streamer">Streamer</th>
+            <th id="lang_panel_command_command_option"></th>
+          </thead>
+          <tbody id="panel_command_command_table">
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

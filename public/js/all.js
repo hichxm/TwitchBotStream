@@ -2,7 +2,7 @@
 var TwitchBotStream;
 
 TwitchBotStream = (function() {
-  var get_url_config, get_url_lang, put_url_config, set_url_data;
+  var get_url_command, get_url_config, get_url_event, get_url_lang, put_url_config, set_url_command, set_url_data, set_url_event;
 
   function TwitchBotStream() {}
 
@@ -10,14 +10,24 @@ TwitchBotStream = (function() {
 
   get_url_lang = "/get/data/lang/";
 
+  get_url_command = "/get/data/command";
+
+  get_url_event = "/get/data/event/";
+
   put_url_config = "/put/data/config/";
 
   set_url_data = "/set/data/config/";
 
+  set_url_event = "/set/data/event/";
+
+  set_url_command = "/set/data/command/";
+
   TwitchBotStream.prototype.init = function() {
-    var CONFIG, LANGUAGE;
+    var COMMAND, CONFIG, EVENT, LANGUAGE;
     LANGUAGE = null;
     CONFIG = null;
+    EVENT = null;
+    COMMAND = null;
     if (!this.checkInstall()) {
       return document.location = "/installation/";
     }
@@ -62,19 +72,100 @@ TwitchBotStream = (function() {
     } catch (error) {}
   };
 
+  TwitchBotStream.prototype.admin_panel_2 = function() {
+    var n, results, that;
+    that = this;
+    try {
+      document.getElementById("lang_panel_command_add").addEventListener("click", function() {
+        var group1, group2;
+        if (document.getElementById("panel_command_action_join").checked) {
+          group1 = "onJoin";
+        } else if (document.getElementById("panel_command_action_leave").checked) {
+          group1 = "onLeave";
+        } else {
+          group1 = "";
+        }
+        if (document.getElementById("panel_command_command_method_me").checked) {
+          group2 = "Me";
+        } else if (document.getElementById("panel_command_method_chat").checked) {
+          group2 = "Chat";
+        } else if (document.getElementById("panel_command_method_whisper").checked) {
+          group2 = "Whisper";
+        } else {
+          group2 = "";
+        }
+        return that.requestAjax(set_url_event + ("?\ncommand.event.event=" + group1 + "&\ncommand.event.method=" + group2 + "&\ncommand.event.message=" + (document.getElementById("panel_command_action_message").value)), "GET");
+      });
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_command_add").addEventListener("click", function() {
+        var group3, user_moderat, user_stramer, user_user;
+        if (document.getElementById("lang_panel_command_command_modo_check").checked) {
+          user_moderat = true;
+        }
+        if (document.getElementById("lang_panel_command_command_user_check").checked) {
+          user_user = true;
+        }
+        if (document.getElementById("lang_panel_command_command_owner_check").checked) {
+          user_stramer = true;
+        }
+        if (document.getElementById("lang_panel_command_event_me_radio").checked) {
+          group3 = "Me";
+        } else if (document.getElementById("lang_panel_command_event_chat_radio").checked) {
+          group3 = "Chat";
+        } else if (document.getElementById("lang_panel_command_event_whisper_radio").checked) {
+          group3 = "Whisper";
+        } else {
+          group3 = "";
+        }
+        return that.requestAjax(set_url_command + ("?\ncommand.command.command=" + (document.getElementById("panel_command_command_input_1").value) + "&\ncommand.command.method=" + group3 + "&\ncommand.command.perm.streamer=" + (user_stramer || false) + "&\ncommand.command.perm.moderato=" + (user_moderat || false) + "&\ncommand.command.perm.user=" + (user_user || false) + "&\ncommand.command.message=" + (document.getElementById("panel_command_command_input_2").value)), "GET");
+      });
+    } catch (error) {}
+    try {
+      this.COMMAND = JSON.parse(this.requestAjax(get_url_command, "GET"));
+      n = 0;
+      while (n < Object.keys(this.COMMAND).length) {
+        console.log(this.COMMAND[Object.keys(this.COMMAND)[n]]);
+        document.getElementById("panel_command_command_table").innerHTML += "<tr>\n  <td>" + this.COMMAND[Object.keys(this.COMMAND)[n]]['command'] + "</td>\n  <td>" + this.COMMAND[Object.keys(this.COMMAND)[n]]['method'] + "</td>\n  <td>" + this.COMMAND[Object.keys(this.COMMAND)[n]]['message'] + "</td>\n  <td>" + (this.COMMAND[Object.keys(this.COMMAND)[n]]['user_user'] ? "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" : "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>") + "</td>\n  <td>" + (this.COMMAND[Object.keys(this.COMMAND)[n]]['user_moderat'] ? "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" : "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>") + "</td>\n  <td>" + (this.COMMAND[Object.keys(this.COMMAND)[n]]['user_stramer'] ? "<i class=\"fa fa-check\" aria-hidden=\"true\"></i>" : "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>") + "</td>\n  <td><i class=\"fa fa-trash\" aria-hidden=\"true\"></i> <i class=\"fa fa-check-circle-o\" aria-hidden=\"true\"></i></td>\n</tr>";
+        n++;
+      }
+    } catch (error) {}
+    try {
+      this.EVENT = JSON.parse(this.requestAjax(get_url_event, "GET"));
+      n = 0;
+      results = [];
+      while (n < Object.keys(this.EVENT).length) {
+        console.log(this.EVENT[Object.keys(this.EVENT)[n]]);
+        document.getElementById("panel_command_event_table").innerHTML += "<tr>\n  <td>" + this.EVENT[Object.keys(this.EVENT)[n]]['event'] + "</td>\n  <td>" + this.EVENT[Object.keys(this.EVENT)[n]]['method'] + "</td>\n  <td>" + this.EVENT[Object.keys(this.EVENT)[n]]['message'] + "</td>\n  <td><i class=\"fa fa-trash\" aria-hidden=\"true\"></i> <i class=\"fa fa-check-circle-o\" aria-hidden=\"true\"></i></td>\n</tr>";
+        results.push(n++);
+      }
+      return results;
+    } catch (error) {}
+  };
+
   TwitchBotStream.prototype.administration = function() {
     var that;
     that = this;
-    document.getElementById("admin_MainPanel").innerHTML = that.requestAjax("/model/admin_0.html", "GET");
-    that.languageInit();
-    that.admin_panel_0();
+    if (window.location.hash === "#administration") {
+      document.getElementById("admin_MainPanel").innerHTML = that.requestAjax("/model/admin_0.html", "GET");
+      that.languageInit();
+      that.admin_panel_0();
+    } else if (window.location.hash === "#command") {
+      document.getElementById("admin_MainPanel").innerHTML = that.requestAjax("/model/admin_2.html", "GET");
+      that.languageInit();
+      that.admin_panel_2();
+    } else if (window.location.hash === "#stats") {
+      console.log(window.location.hash);
+    }
     return window.addEventListener("hashchange", function() {
       if (window.location.hash === "#administration") {
         document.getElementById("admin_MainPanel").innerHTML = that.requestAjax("/model/admin_0.html", "GET");
         that.languageInit();
         return that.admin_panel_0();
       } else if (window.location.hash === "#command") {
-        return console.log(window.location.hash);
+        document.getElementById("admin_MainPanel").innerHTML = that.requestAjax("/model/admin_2.html", "GET");
+        that.languageInit();
+        return that.admin_panel_2();
       } else if (window.location.hash === "#stats") {
         return console.log(window.location.hash);
       }
@@ -141,16 +232,6 @@ TwitchBotStream = (function() {
           return document.location = "/";
         });
       } catch (error) {}
-    }
-  };
-
-  TwitchBotStream.prototype.checkBotStart = function() {
-    var Parsed;
-    Parsed = JSON.parse(this.requestAjax(get_url_config, "GET"));
-    if (Parsed.BOT.start) {
-      return true;
-    } else {
-      return false;
     }
   };
 
@@ -239,8 +320,84 @@ TwitchBotStream = (function() {
       document.getElementById("lang_panel_bot_color_save").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_bot_color_save;
     } catch (error) {}
     try {
+      document.getElementById("lang_panel_command_event").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_event;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_method_me").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_method_me;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_method_chat").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_method_chat;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_method_whisper").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_method_whisper;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_action_join").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_action_join;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_action_leave").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_action_leave;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_command").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_command;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_add").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_add;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_command_add").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_command_add;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_event_me").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_event_me;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_event_chat").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_event_chat;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_event_whisper").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_event_whisper;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_command_command").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_command_command;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_command_result").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_command_result;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_command_option").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_command_option;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_event_event").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_event_event;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_event_method").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_event_method;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_event_result").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_event_result;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_event_option").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_event_option;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_command_owner").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_command_owner;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_command_user").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_command_user;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_command_command_modo").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_command_modo;
+    } catch (error) {}
+    try {
       return document.getElementById("config_bot_name").innerHTML = this.CONFIG.USER.username;
     } catch (error) {}
+  };
+
+  TwitchBotStream.prototype.checkBotStart = function() {
+    var Parsed;
+    Parsed = JSON.parse(this.requestAjax(get_url_config, "GET"));
+    if (Parsed.BOT.start) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   TwitchBotStream.prototype.checkInstall = function() {

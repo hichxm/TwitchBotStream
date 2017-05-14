@@ -4,14 +4,15 @@
   "description": "Bot for yout twitch stream",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm install & node server.js"
+    "install": "npm install",
+    "start": "node server.js"
   },
   "author": "volca780",
   "license": "ISC",
   "dependencies": {
     "express": "^4.15.2",
     "ini": "^1.3.4",
+    "sha1": "^1.1.1",
     "tmi.js": "^1.2.0"
   }
 }
