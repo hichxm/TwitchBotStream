@@ -62,6 +62,10 @@ class TwitchBotStream
   # ========================== #
   admin_panel_1: ->
     that = @
+    # ========================== #
+    # Display statistique from   #
+    # data file                  #
+    # ========================== #
     try
       @FOLLOWER = JSON.parse that.requestAjax get_url_follower, "GET"
       @VIEWER = JSON.parse that.requestAjax get_url_viewer, "GET"
@@ -77,6 +81,10 @@ class TwitchBotStream
         document.getElementById("panel_stats_viewer_total").innerHTML = @VIEWER.INFO.viewer
         document.getElementById("panel_stats_message_total").innerHTML = @MESSAGE.INFO.total
       , 2500
+    # ========================== #
+    # addEventListener and add   #
+    # to table the new sondage   #
+    # ========================== #
     try
       document.getElementById("lang_panel_stats_form_question_add").addEventListener "click", ->
         document.getElementById("panel_stats_table").innerHTML += """
