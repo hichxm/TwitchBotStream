@@ -4,6 +4,9 @@ class TwitchBotStream
   get_url_lang = "/get/data/lang/"
   get_url_command = "/get/data/command"
   get_url_event = "/get/data/event/"
+  get_url_follower = "/get/data/follower/"
+  get_url_viewer = "/get/data/viewer/"
+  get_url_message = "/get/data/message/"
   put_url_config = "/put/data/config/"
   set_url_data = "/set/data/config/"
   set_url_event = "/set/data/event/"
@@ -14,6 +17,8 @@ class TwitchBotStream
     CONFIG = null
     EVENT = null
     COMMAND = null
+    FOLLOWER = null
+    VIEWER = null
 
     if !@checkInstall()
       document.location = "/installation/"
@@ -50,6 +55,46 @@ class TwitchBotStream
       document.getElementById("lang_panel_bot_color_save").addEventListener "click", ->
         that.requestAjax put_url_config + """?config.bot.color=#{document.getElementById("admin_0_input_1").value.substring(1)}""", "GET"
         document.location = "/#administration"
+
+  # ========================== #
+  # Initialised                #
+  # "/#stats"                  #
+  # ========================== #
+  admin_panel_1: ->
+    that = @
+    try
+      @FOLLOWER = JSON.parse that.requestAjax get_url_follower, "GET"
+      @VIEWER = JSON.parse that.requestAjax get_url_viewer, "GET"
+      @MESSAGE = JSON.parse that.requestAjax get_url_message, "GET"
+      document.getElementById("panel_stats_follower_total").innerHTML = @FOLLOWER.INFO.follower
+      document.getElementById("panel_stats_viewer_total").innerHTML = @VIEWER.INFO.viewer
+      document.getElementById("panel_stats_message_total").innerHTML = @MESSAGE.INFO.total
+      setInterval =>
+        @FOLLOWER = JSON.parse that.requestAjax get_url_follower, "GET"
+        @VIEWER = JSON.parse that.requestAjax get_url_viewer, "GET"
+        @MESSAGE = JSON.parse that.requestAjax get_url_message, "GET"
+        document.getElementById("panel_stats_follower_total").innerHTML = @FOLLOWER.INFO.follower
+        document.getElementById("panel_stats_viewer_total").innerHTML = @VIEWER.INFO.viewer
+        document.getElementById("panel_stats_message_total").innerHTML = @MESSAGE.INFO.total
+      , 2500
+    try
+      document.getElementById("lang_panel_stats_form_question_add").addEventListener "click", ->
+        document.getElementById("panel_stats_table").innerHTML += """
+        <tr>
+          <th>#{that.LANGUAGE.LANGUAGE.lang_panel_stats_table_question}</th>
+          <td>#{document.getElementById("panel_stats_input_1").value}</td>
+          <td><i class="fa fa-times" aria-hidden="true"></i></td>
+        </tr>
+        """
+    try
+      document.getElementById("lang_panel_stats_form_reponse_add").addEventListener "click", ->
+        document.getElementById("panel_stats_table").innerHTML += """
+        <tr>
+          <th>#{that.LANGUAGE.LANGUAGE.lang_panel_stats_table_reponse}</th>
+          <td>#{document.getElementById("panel_stats_input_2").value}</td>
+          <td><i class="fa fa-times" aria-hidden="true"></i></td>
+        </tr>
+        """
 
   # ========================== #
   # Initialised                #
@@ -164,14 +209,26 @@ class TwitchBotStream
       document.getElementById("admin_MainPanel").innerHTML = that.requestAjax "/model/admin_0.html", "GET"
       that.languageInit()
       that.admin_panel_0()
+      document.getElementById("nav_link_admin").classList.add "active"
+      document.getElementById("nav_link_stats").classList.remove "active"
+      document.getElementById("nav_link_command").classList.remove "active"
+
+
+    else if window.location.hash is """#stats"""
+      document.getElementById("admin_MainPanel").innerHTML = that.requestAjax "/model/admin_1.html", "GET"
+      that.languageInit()
+      that.admin_panel_1()
+      document.getElementById("nav_link_admin").classList.remove "active"
+      document.getElementById("nav_link_stats").classList.add "active"
+      document.getElementById("nav_link_command").classList.remove "active"
 
     else if window.location.hash is """#command"""
       document.getElementById("admin_MainPanel").innerHTML = that.requestAjax "/model/admin_2.html", "GET"
       that.languageInit()
       that.admin_panel_2()
-
-    else if window.location.hash is """#stats"""
-      console.log window.location.hash
+      document.getElementById("nav_link_admin").classList.remove "active"
+      document.getElementById("nav_link_stats").classList.remove "active"
+      document.getElementById("nav_link_command").classList.add "active"
 
     window.addEventListener "hashchange", -> #EVENT LISTEN WHEN # CHANGE
 
@@ -179,14 +236,25 @@ class TwitchBotStream
         document.getElementById("admin_MainPanel").innerHTML = that.requestAjax "/model/admin_0.html", "GET"
         that.languageInit()
         that.admin_panel_0()
+        document.getElementById("nav_link_admin").classList.add "active"
+        document.getElementById("nav_link_stats").classList.remove "active"
+        document.getElementById("nav_link_command").classList.remove "active"
 
       else if window.location.hash is """#command"""
         document.getElementById("admin_MainPanel").innerHTML = that.requestAjax "/model/admin_2.html", "GET"
         that.languageInit()
         that.admin_panel_2()
+        document.getElementById("nav_link_admin").classList.remove "active"
+        document.getElementById("nav_link_stats").classList.remove "active"
+        document.getElementById("nav_link_command").classList.add "active"
 
       else if window.location.hash is """#stats"""
-        console.log window.location.hash
+        document.getElementById("admin_MainPanel").innerHTML = that.requestAjax "/model/admin_1.html", "GET"
+        that.languageInit()
+        that.admin_panel_1()
+        document.getElementById("nav_link_admin").classList.remove "active"
+        document.getElementById("nav_link_stats").classList.add "active"
+        document.getElementById("nav_link_command").classList.remove "active"
 
   # ========================== #
   # Initialised on             #
@@ -317,6 +385,17 @@ class TwitchBotStream
     try document.getElementById("lang_panel_command_command_owner").innerHTML         = @LANGUAGE.LANGUAGE.lang_panel_command_command_owner
     try document.getElementById("lang_panel_command_command_user").innerHTML          = @LANGUAGE.LANGUAGE.lang_panel_command_command_user
     try document.getElementById("lang_panel_command_command_modo").innerHTML          = @LANGUAGE.LANGUAGE.lang_panel_command_command_modo
+    try document.getElementById("lang_panel_stats").innerHTML                         = @LANGUAGE.LANGUAGE.lang_panel_stats
+    try document.getElementById("lang_panel_stats_follower").innerHTML                = @LANGUAGE.LANGUAGE.lang_panel_stats_follower
+    try document.getElementById("lang_panel_stats_viewer").innerHTML                  = @LANGUAGE.LANGUAGE.lang_panel_stats_viewer
+    try document.getElementById("lang_panel_stats_message").innerHTML                 = @LANGUAGE.LANGUAGE.lang_panel_stats_message
+    try document.getElementById("lang_panel_stats_sondage").innerHTML                 = @LANGUAGE.LANGUAGE.lang_panel_stats_sondage
+    try document.getElementById("lang_panel_stats_form_question").innerHTML           = @LANGUAGE.LANGUAGE.lang_panel_stats_form_question
+    try document.getElementById("lang_panel_stats_form_question_add").innerHTML       = @LANGUAGE.LANGUAGE.lang_panel_stats_form_question_add
+    try document.getElementById("lang_panel_stats_form_reponse").innerHTML            = @LANGUAGE.LANGUAGE.lang_panel_stats_form_reponse
+    try document.getElementById("lang_panel_stats_form_reponse_add").innerHTML        = @LANGUAGE.LANGUAGE.lang_panel_stats_form_reponse_add
+    try document.getElementById("lang_panel_stats_table_question").innerHTML          = @LANGUAGE.LANGUAGE.lang_panel_stats_table_question
+    try document.getElementById("lang_panel_stats_table_reponse").innerHTML           = @LANGUAGE.LANGUAGE.lang_panel_stats_table_reponse
 
     try document.getElementById("config_bot_name").innerHTML                          = @CONFIG.USER.username
 
