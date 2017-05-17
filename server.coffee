@@ -3,7 +3,6 @@ express = require "express"
 expressApp = express()
 ini = require "ini"
 fs = require "fs"
-BodyParser = require "body-parser"
 sha1 = require "sha1"
 
 
@@ -21,18 +20,26 @@ expressApp.use express.static('public') #ROUTING OF PUBLIC
 #  - "/GET/data/lang/"       #
 #  - "/GET/data/event/"      #
 #  - "/GET/data/command/"    #
+#  - "/GET/data/follower/"   #
 # This file not accessible   #
-# from public dir            #
+# from public dir and        #
+# convert INI file to JSON   #
 # ========================== #
-expressApp.get "/GET/data/config/", (req, res) -> #DATA/CONFIG.INI to JSON
+expressApp.get "/GET/data/config/", (req, res) ->
   res.send ini.parse fs.readFileSync "./data/config.ini", 'utf-8'
-expressApp.get "/GET/data/lang/", (req, res) -> #DATA/LANG/$LANG.INI to JSON
-  Parsed = ini.parse fs.readFileSync "./data/config.ini", "utf-8"
-  res.send ini.parse fs.readFileSync "./data/lang/#{Parsed.OPTION.lang}.ini", 'utf-8'
+expressApp.get "/GET/data/lang/", (req, res) ->
+  iniFile = ini.parse fs.readFileSync "./data/config.ini", 'utf-8'
+  res.send ini.parse fs.readFileSync """./data/lang/#{iniFile.OPTION.lang}.ini""", 'utf-8'
 expressApp.get "/GET/data/event/", (req, res) ->
   res.send ini.parse fs.readFileSync "./data/command/event.ini", 'utf-8'
-expressApp.get "/GET/data/command", (req, res) ->
+expressApp.get "/GET/data/command/", (req, res) ->
   res.send ini.parse fs.readFileSync "./data/command/command.ini", 'utf-8'
+expressApp.get "/GET/data/follower/", (req, res) ->
+  res.send ini.parse fs.readFileSync "./data/stats/follower.ini", 'utf-8'
+expressApp.get "/GET/data/viewer/", (req, res) ->
+  res.send ini.parse fs.readFileSync "./data/stats/viewer.ini", 'utf-8'
+expressApp.get "/GET/data/message/", (req, res) ->
+  res.send ini.parse fs.readFileSync "./data/stats/message.ini", 'utf-8'
 
 # ========================== #
 # Define url of main file    #
