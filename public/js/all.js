@@ -2,7 +2,7 @@
 var TwitchBotStream;
 
 TwitchBotStream = (function() {
-  var get_url_command, get_url_config, get_url_event, get_url_lang, put_url_config, set_url_command, set_url_data, set_url_event;
+  var get_url_command, get_url_config, get_url_event, get_url_follower, get_url_lang, get_url_message, get_url_viewer, put_url_config, set_url_command, set_url_data, set_url_event;
 
   function TwitchBotStream() {}
 
@@ -14,6 +14,12 @@ TwitchBotStream = (function() {
 
   get_url_event = "/get/data/event/";
 
+  get_url_follower = "/get/data/follower/";
+
+  get_url_viewer = "/get/data/viewer/";
+
+  get_url_message = "/get/data/message/";
+
   put_url_config = "/put/data/config/";
 
   set_url_data = "/set/data/config/";
@@ -23,11 +29,13 @@ TwitchBotStream = (function() {
   set_url_command = "/set/data/command/";
 
   TwitchBotStream.prototype.init = function() {
-    var COMMAND, CONFIG, EVENT, LANGUAGE;
+    var COMMAND, CONFIG, EVENT, FOLLOWER, LANGUAGE, VIEWER;
     LANGUAGE = null;
     CONFIG = null;
     EVENT = null;
     COMMAND = null;
+    FOLLOWER = null;
+    VIEWER = null;
     if (!this.checkInstall()) {
       return document.location = "/installation/";
     }
@@ -68,6 +76,39 @@ TwitchBotStream = (function() {
       return document.getElementById("lang_panel_bot_color_save").addEventListener("click", function() {
         that.requestAjax(put_url_config + ("?config.bot.color=" + (document.getElementById("admin_0_input_1").value.substring(1))), "GET");
         return document.location = "/#administration";
+      });
+    } catch (error) {}
+  };
+
+  TwitchBotStream.prototype.admin_panel_1 = function() {
+    var that;
+    that = this;
+    try {
+      this.FOLLOWER = JSON.parse(that.requestAjax(get_url_follower, "GET"));
+      this.VIEWER = JSON.parse(that.requestAjax(get_url_viewer, "GET"));
+      this.MESSAGE = JSON.parse(that.requestAjax(get_url_message, "GET"));
+      document.getElementById("panel_stats_follower_total").innerHTML = this.FOLLOWER.INFO.follower;
+      document.getElementById("panel_stats_viewer_total").innerHTML = this.VIEWER.INFO.viewer;
+      document.getElementById("panel_stats_message_total").innerHTML = this.MESSAGE.INFO.total;
+      setInterval((function(_this) {
+        return function() {
+          _this.FOLLOWER = JSON.parse(that.requestAjax(get_url_follower, "GET"));
+          _this.VIEWER = JSON.parse(that.requestAjax(get_url_viewer, "GET"));
+          _this.MESSAGE = JSON.parse(that.requestAjax(get_url_message, "GET"));
+          document.getElementById("panel_stats_follower_total").innerHTML = _this.FOLLOWER.INFO.follower;
+          document.getElementById("panel_stats_viewer_total").innerHTML = _this.VIEWER.INFO.viewer;
+          return document.getElementById("panel_stats_message_total").innerHTML = _this.MESSAGE.INFO.total;
+        };
+      })(this), 2500);
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats_form_question_add").addEventListener("click", function() {
+        return document.getElementById("panel_stats_table").innerHTML += "<tr>\n  <th>" + that.LANGUAGE.LANGUAGE.lang_panel_stats_table_question + "</th>\n  <td>" + (document.getElementById("panel_stats_input_1").value) + "</td>\n  <td><i class=\"fa fa-times\" aria-hidden=\"true\"></i></td>\n</tr>";
+      });
+    } catch (error) {}
+    try {
+      return document.getElementById("lang_panel_stats_form_reponse_add").addEventListener("click", function() {
+        return document.getElementById("panel_stats_table").innerHTML += "<tr>\n  <th>" + that.LANGUAGE.LANGUAGE.lang_panel_stats_table_reponse + "</th>\n  <td>" + (document.getElementById("panel_stats_input_2").value) + "</td>\n  <td><i class=\"fa fa-times\" aria-hidden=\"true\"></i></td>\n</tr>";
       });
     } catch (error) {}
   };
@@ -150,24 +191,46 @@ TwitchBotStream = (function() {
       document.getElementById("admin_MainPanel").innerHTML = that.requestAjax("/model/admin_0.html", "GET");
       that.languageInit();
       that.admin_panel_0();
+      document.getElementById("nav_link_admin").classList.add("active");
+      document.getElementById("nav_link_stats").classList.remove("active");
+      document.getElementById("nav_link_command").classList.remove("active");
+    } else if (window.location.hash === "#stats") {
+      document.getElementById("admin_MainPanel").innerHTML = that.requestAjax("/model/admin_1.html", "GET");
+      that.languageInit();
+      that.admin_panel_1();
+      document.getElementById("nav_link_admin").classList.remove("active");
+      document.getElementById("nav_link_stats").classList.add("active");
+      document.getElementById("nav_link_command").classList.remove("active");
     } else if (window.location.hash === "#command") {
       document.getElementById("admin_MainPanel").innerHTML = that.requestAjax("/model/admin_2.html", "GET");
       that.languageInit();
       that.admin_panel_2();
-    } else if (window.location.hash === "#stats") {
-      console.log(window.location.hash);
+      document.getElementById("nav_link_admin").classList.remove("active");
+      document.getElementById("nav_link_stats").classList.remove("active");
+      document.getElementById("nav_link_command").classList.add("active");
     }
     return window.addEventListener("hashchange", function() {
       if (window.location.hash === "#administration") {
         document.getElementById("admin_MainPanel").innerHTML = that.requestAjax("/model/admin_0.html", "GET");
         that.languageInit();
-        return that.admin_panel_0();
+        that.admin_panel_0();
+        document.getElementById("nav_link_admin").classList.add("active");
+        document.getElementById("nav_link_stats").classList.remove("active");
+        return document.getElementById("nav_link_command").classList.remove("active");
       } else if (window.location.hash === "#command") {
         document.getElementById("admin_MainPanel").innerHTML = that.requestAjax("/model/admin_2.html", "GET");
         that.languageInit();
-        return that.admin_panel_2();
+        that.admin_panel_2();
+        document.getElementById("nav_link_admin").classList.remove("active");
+        document.getElementById("nav_link_stats").classList.remove("active");
+        return document.getElementById("nav_link_command").classList.add("active");
       } else if (window.location.hash === "#stats") {
-        return console.log(window.location.hash);
+        document.getElementById("admin_MainPanel").innerHTML = that.requestAjax("/model/admin_1.html", "GET");
+        that.languageInit();
+        that.admin_panel_1();
+        document.getElementById("nav_link_admin").classList.remove("active");
+        document.getElementById("nav_link_stats").classList.add("active");
+        return document.getElementById("nav_link_command").classList.remove("active");
       }
     });
   };
@@ -384,6 +447,39 @@ TwitchBotStream = (function() {
     } catch (error) {}
     try {
       document.getElementById("lang_panel_command_command_modo").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_command_command_modo;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_stats;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats_follower").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_stats_follower;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats_viewer").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_stats_viewer;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats_message").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_stats_message;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats_sondage").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_stats_sondage;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats_form_question").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_stats_form_question;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats_form_question_add").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_stats_form_question_add;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats_form_reponse").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_stats_form_reponse;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats_form_reponse_add").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_stats_form_reponse_add;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats_table_question").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_stats_table_question;
+    } catch (error) {}
+    try {
+      document.getElementById("lang_panel_stats_table_reponse").innerHTML = this.LANGUAGE.LANGUAGE.lang_panel_stats_table_reponse;
     } catch (error) {}
     try {
       return document.getElementById("config_bot_name").innerHTML = this.CONFIG.USER.username;

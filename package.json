@@ -4,7 +4,6 @@
   "description": "Bot for yout twitch stream",
   "main": "server.js",
   "scripts": {
-    "install": "npm install",
     "start": "node server.js"
   },
   "author": "volca780",
