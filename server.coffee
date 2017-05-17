@@ -21,6 +21,8 @@ expressApp.use express.static('public') #ROUTING OF PUBLIC
 #  - "/GET/data/event/"      #
 #  - "/GET/data/command/"    #
 #  - "/GET/data/follower/"   #
+#  - "/GET/data/viewer/"     #
+#  - "/GET/data/message/"    #
 # This file not accessible   #
 # from public dir and        #
 # convert INI file to JSON   #
