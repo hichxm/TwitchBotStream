@@ -64,7 +64,7 @@ VarToText = (text, data) ->
                 # ========================== #
                 # Replace user info          #
                 # ========================== #
-                .replace("${username}", DATA.username || null)
+                .replace("${username}", DATA.username)
 
 
 
