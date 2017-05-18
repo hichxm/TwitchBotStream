@@ -58,7 +58,7 @@ VarToText = function(text, data) {
   CONFIG = ini.parse(fs.readFileSync("./data/config.ini", 'utf-8'));
   INFO = JSON.parse(requestAjax("https://api.twitch.tv/kraken/streams/" + CONFIG.USER.chanel, "GET"));
   DATA = data.data;
-  text = text.toString().replace("${title}", INFO.stream.channel.status).replace("${game}", INFO.stream.game).replace("${resolution}", INFO.stream.video_height).replace("${fps}", Math.round(INFO.stream.average_fps)).replace("${lang}", INFO.stream.channel.language).replace("${id}", INFO.stream._id).replace("${viewer}", INFO.stream.viewers).replace("${follower}", INFO.stream.channel.followers).replace("${views}", INFO.stream.channel.views).replace("${lang_s}", INFO.stream.channel.broadcaster_language).replace("${streamer}", INFO.stream.channel.display_name).replace("${url}", INFO.stream.channel.url).replace("${username}", DATA.username || null);
+  text = text.toString().replace("${title}", INFO.stream.channel.status).replace("${game}", INFO.stream.game).replace("${resolution}", INFO.stream.video_height).replace("${fps}", Math.round(INFO.stream.average_fps)).replace("${lang}", INFO.stream.channel.language).replace("${id}", INFO.stream._id).replace("${viewer}", INFO.stream.viewers).replace("${follower}", INFO.stream.channel.followers).replace("${views}", INFO.stream.channel.views).replace("${lang_s}", INFO.stream.channel.broadcaster_language).replace("${streamer}", INFO.stream.channel.display_name).replace("${url}", INFO.stream.channel.url).replace("${username}", DATA.username);
   return text;
 };
 
