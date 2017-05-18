@@ -10,8 +10,8 @@ indispensable pour une meilleure lecture du code sur la branch [develop](https:/
   - [x] Administration - Administation
   - [x] Administration - Evenement
   - [ ] Administration - Jeu
-  - [ ] BOT - Commande
-  - [ ] BOT - Evenement
+  - [x] BOT - Commande
+  - [x] BOT - Evenement
   - [ ] BOT - Moderateur
 
 - Tâche publique:
