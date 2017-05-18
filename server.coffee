@@ -41,7 +41,7 @@ requestAjax = (fun_url, fun_method) ->
 VarToText = (text, data) ->
                 CONFIG = ini.parse fs.readFileSync "./data/config.ini", 'utf-8'
                 INFO = JSON.parse requestAjax """https://api.twitch.tv/kraken/streams/#{CONFIG.USER.chanel}""", "GET"
-                DATA = data.data || null
+                DATA = data.data
                 text = text.toString()
                 # ========================== #
                 # Replace stream info        #
