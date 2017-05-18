@@ -2,7 +2,7 @@
 var TwitchBotStream;
 
 TwitchBotStream = (function() {
-  var get_url_command, get_url_config, get_url_event, get_url_follower, get_url_lang, get_url_message, get_url_viewer, put_url_config, set_url_command, set_url_data, set_url_event;
+  var get_url_command, get_url_config, get_url_event, get_url_follower, get_url_lang, get_url_log, get_url_message, get_url_viewer, put_url_config, set_url_command, set_url_data, set_url_event;
 
   function TwitchBotStream() {}
 
@@ -20,6 +20,8 @@ TwitchBotStream = (function() {
 
   get_url_message = "/get/data/message/";
 
+  get_url_log = "/get/data/log/";
+
   put_url_config = "/put/data/config/";
 
   set_url_data = "/set/data/config/";
@@ -29,13 +31,14 @@ TwitchBotStream = (function() {
   set_url_command = "/set/data/command/";
 
   TwitchBotStream.prototype.init = function() {
-    var COMMAND, CONFIG, EVENT, FOLLOWER, LANGUAGE, VIEWER;
+    var COMMAND, CONFIG, EVENT, FOLLOWER, LANGUAGE, LOG, VIEWER;
     LANGUAGE = null;
     CONFIG = null;
     EVENT = null;
     COMMAND = null;
     FOLLOWER = null;
     VIEWER = null;
+    LOG = null;
     if (!this.checkInstall()) {
       return document.location = "/installation/";
     }
@@ -51,6 +54,14 @@ TwitchBotStream = (function() {
       document.getElementById("lang_panel_bot_stop").classList.add("active");
       document.getElementById("lang_panel_bot_start").classList.remove("active");
     }
+    try {
+      setInterval((function(_this) {
+        return function() {
+          _this.LOG = that.requestAjax(get_url_log, "GET");
+          return document.getElementById("LOGBOX").innerHTML = _this.LOG.replace(/\n/g, '<br />');
+        };
+      })(this), 1500);
+    } catch (error) {}
     try {
       document.getElementById("lang_panel_bot_start").addEventListener("click", function() {
         that.requestAjax(set_url_data + "?config.bot.start=true", "GET");
