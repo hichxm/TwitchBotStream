@@ -7,6 +7,7 @@ class TwitchBotStream
   get_url_follower = "/get/data/follower/"
   get_url_viewer = "/get/data/viewer/"
   get_url_message = "/get/data/message/"
+  get_url_log = "/get/data/log/"
   put_url_config = "/put/data/config/"
   set_url_data = "/set/data/config/"
   set_url_event = "/set/data/event/"
@@ -19,6 +20,7 @@ class TwitchBotStream
     COMMAND = null
     FOLLOWER = null
     VIEWER = null
+    LOG = null
 
     if !@checkInstall()
       document.location = "/installation/"
@@ -35,6 +37,12 @@ class TwitchBotStream
     else if !that.checkBotStart() #VERIFY ACTUAL STATUS OF BOT
       document.getElementById("lang_panel_bot_stop").classList.add "active"
       document.getElementById("lang_panel_bot_start").classList.remove "active"
+
+    try #setInterval LOGBOX
+      setInterval =>
+        @LOG = that.requestAjax get_url_log, "GET"
+        document.getElementById("LOGBOX").innerHTML = @LOG.replace(/\n/g,'<br />')
+      , 1500
 
     try #addEventListener "click" start
       document.getElementById("lang_panel_bot_start").addEventListener "click", ->
@@ -55,6 +63,7 @@ class TwitchBotStream
       document.getElementById("lang_panel_bot_color_save").addEventListener "click", ->
         that.requestAjax put_url_config + """?config.bot.color=#{document.getElementById("admin_0_input_1").value.substring(1)}""", "GET"
         document.location = "/#administration"
+
 
   # ========================== #
   # Initialised                #
