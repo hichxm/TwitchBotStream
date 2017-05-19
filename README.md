@@ -42,52 +42,85 @@ Rendez-vous sur cette url pour acceder à la page d'administration du bot twitch
 
 ## Variable globale
 
-Variable      | Result
+Variable      | Resultat
 ------------- | --------------------------
-${username}   | Nom d'utilisateur
-${title}      | Titre du stream
-${game}       | Nom du jeu en cour
-${resolution} | Resolution de l'écran
-${fps}        | Nombre d'image par seconde
-${lang}       | Langue du jeu
-${id}         | Identfiant du stream
-${viewer}     | Nombre de viewer actuelle
-${follower}   | Nombre de follower actuelle
-${views}      | Nombre de vue actuelle
-${lang_s}     | Langage du streamer
-${streamer}   | Nom du d'utilisateur du streamer
-${url}        | Lien direct vers le stream
+${brodcaster}           | Nom du streamer
+${brodcaster viewer}    | Nombre de viewer
+${brodcaster follower}  | Nombre de follower
+${brodcaster views}     | Nombre de vue
+${brodcaster lang}      | Langue du streamer
+${brodcaster url}       | Url vers le stream
+**----------------------------------------------** | **----------------------------------------------**
+${streamer title}       | Titre du stream
+${streamer game}        | Jeu du stream
+${streamer resolution}  | Resolution du stream
+${streamer fps}         | Fps du stream
+${streamer lang}        | Langue du jeu
+${streamer url}         | Url du stream
+**----------------------------------------------** | **----------------------------------------------**
+${username}             | Nom d'utilisateur
+${username follower}    | Nombre de follower de l'utilisateur
+${username views}       | Nombre de vue de l'utilisateur
+${username url}         | Url vers l'utilisateur
+${username lang}        | Langue de l'utilisateur
 
-L'utilisation des variables sont définie par le billet de la fonction ```VarToText()``` disponible dans le fichier [server.coffee](https://github.com/volca780/TwitchBotStream/blob/develop/server.coffee)
+
+
+L'utilisation des variables sont définie par le billet de la fonction ```VarToText()``` disponible dans le fichier [server.coffee](https://github.com/volca780/TwitchBotStream/blob/develop/server.coffee#L41)
 
 ```coffeescript
-VarToText = (text, data) ->
-  CONFIG = ini.parse fs.readFileSync "./data/config.ini", 'utf-8'
-  INFO = JSON.parse requestAjax """https://api.twitch.tv/kraken/streams/#{CONFIG.USER.chanel}""", "GET"
-  DATA = data.data
-  text = text.toString()
-  # ========================== #
-  # Replace stream info        #
-  # ========================== #
-  .replace("${title}", INFO.stream.channel.status)
-  .replace("${game}", INFO.stream.game)
-  .replace("${resolution}", INFO.stream.video_height)
-  .replace("${fps}", Math.round INFO.stream.average_fps)
-  .replace("${lang}", INFO.stream.channel.language)
-  .replace("${id}", INFO.stream._id)
-  # ========================== #
-  # Replace streamer info      #
-  # ========================== #
-  .replace("${viewer}", INFO.stream.viewers)
-  .replace("${follower}", INFO.stream.channel.followers)
-  .replace("${views}", INFO.stream.channel.views)
-  .replace("${lang_s}", INFO.stream.channel.broadcaster_language)
-  .replace("${streamer}", INFO.stream.channel.display_name)
-  .replace("${url}", INFO.stream.channel.url)
-  # ========================== #
-  # Replace user info          #
-  # ========================== #
-  .replace("${username}", DATA.username)
+# ========================== #
+# Replace stream info        #
+# ========================== #
+.replace "${stream title}", STREAM_ONLINE.channel.status
+.replace "${stream game}", STREAM_ONLINE.game
+.replace "${stream resolution}", STREAM_ONLINE.stream.video_height
+.replace "${stream fps}", MATH.round STREAM_ONLINE.stream.average_fps
+.replace "${stream lang}", STREAM_ONLINE.stream.channel.language
+.replace "${stream id}", STREAM_ONLINE.stream._id
+
+# ========================== #
+# Replace streamer info      #
+# ========================== #
+.replace "${brodcaster}", STREAM_ONLINE.stream.channel.display_name
+.replace "${brodcaster viewer}", STREAM_ONLINE.stream.viewers
+.replace "${brodcaster follower}", STREAM_ONLINE.stream.channel.followers
+.replace "${brodcaster views}", STREAM_ONLINE.stream.channel.views
+.replace "${brodcaster lang}", STREAM_ONLINE.stream.channel.broadcaster_language
+.replace "${brodcaster url}", STREAM_ONLINE.stream.channel.url
+
+# ========================== #
+# Replace user info          #
+# ========================== #
+.replace "${username}", ->
+  if DATA.username
+    return DATA.username
+  else if not DATA.username
+    return "undefined"
+.replace "${username follower}", ->
+  if DATA.username
+    USER = JSON.parse requestAjax """https://api.twitch.tv/kraken/channels/#{DATA.username}""", "GET"
+    return USER.followers
+  else if not DATA.username
+    return ""
+.replace "${username views}", ->
+  if DATA.username
+    USER = JSON.parse requestAjax """https://api.twitch.tv/kraken/channels/#{DATA.username}""", "GET"
+    return USER.views
+  else if not DATA.username
+    return ""
+.replace "${username url}", ->
+  if DATA.username
+    USER = JSON.parse requestAjax """https://api.twitch.tv/kraken/channels/#{DATA.username}""", "GET"
+    return USER.url
+  else if not DATA.username
+    return ""
+.replace "${username lang}", ->
+  if DATA.username
+    USER = JSON.parse requestAjax """https://api.twitch.tv/kraken/channels/#{DATA.username}""", "GET"
+    return USER.language
+  else if not DATA.username
+    return ""
 ```
 
 ## Langage
