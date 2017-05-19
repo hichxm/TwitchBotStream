@@ -82,14 +82,14 @@ class TwitchBotStream
       document.getElementById("panel_stats_follower_total").innerHTML = @FOLLOWER.INFO.follower
       document.getElementById("panel_stats_viewer_total").innerHTML = @VIEWER.INFO.viewer
       document.getElementById("panel_stats_message_total").innerHTML = @MESSAGE.INFO.total
-      setInterval =>
-        @FOLLOWER = JSON.parse that.requestAjax get_url_follower, "GET"
-        @VIEWER = JSON.parse that.requestAjax get_url_viewer, "GET"
-        @MESSAGE = JSON.parse that.requestAjax get_url_message, "GET"
-        document.getElementById("panel_stats_follower_total").innerHTML = @FOLLOWER.INFO.follower
-        document.getElementById("panel_stats_viewer_total").innerHTML = @VIEWER.INFO.viewer
-        document.getElementById("panel_stats_message_total").innerHTML = @MESSAGE.INFO.total
-      , 2500
+      #setInterval =>
+      #  @FOLLOWER = JSON.parse that.requestAjax get_url_follower, "GET"
+      #  @VIEWER = JSON.parse that.requestAjax get_url_viewer, "GET"
+      #  @MESSAGE = JSON.parse that.requestAjax get_url_message, "GET"
+      #  document.getElementById("panel_stats_follower_total").innerHTML = @FOLLOWER.INFO.follower
+      #  document.getElementById("panel_stats_viewer_total").innerHTML = @VIEWER.INFO.viewer
+      #  document.getElementById("panel_stats_message_total").innerHTML = @MESSAGE.INFO.total
+      #, 5000
     # ========================== #
     # addEventListener and add   #
     # to table the new sondage   #

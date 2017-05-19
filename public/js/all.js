@@ -101,16 +101,6 @@ TwitchBotStream = (function() {
       document.getElementById("panel_stats_follower_total").innerHTML = this.FOLLOWER.INFO.follower;
       document.getElementById("panel_stats_viewer_total").innerHTML = this.VIEWER.INFO.viewer;
       document.getElementById("panel_stats_message_total").innerHTML = this.MESSAGE.INFO.total;
-      setInterval((function(_this) {
-        return function() {
-          _this.FOLLOWER = JSON.parse(that.requestAjax(get_url_follower, "GET"));
-          _this.VIEWER = JSON.parse(that.requestAjax(get_url_viewer, "GET"));
-          _this.MESSAGE = JSON.parse(that.requestAjax(get_url_message, "GET"));
-          document.getElementById("panel_stats_follower_total").innerHTML = _this.FOLLOWER.INFO.follower;
-          document.getElementById("panel_stats_viewer_total").innerHTML = _this.VIEWER.INFO.viewer;
-          return document.getElementById("panel_stats_message_total").innerHTML = _this.MESSAGE.INFO.total;
-        };
-      })(this), 2500);
     } catch (error) {}
     try {
       document.getElementById("lang_panel_stats_form_question_add").addEventListener("click", function() {

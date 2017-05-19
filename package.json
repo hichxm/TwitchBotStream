@@ -1,7 +1,7 @@
 {
   "name": "twitchbotstream",
-  "version": "1.0.0",
-  "description": "Bot for yout twitch stream",
+  "version": "1.1.0",
+  "description": "Bot for your twitch stream",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

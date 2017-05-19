@@ -54,11 +54,92 @@ requestAjax = function(fun_url, fun_method) {
 };
 
 VarToText = function(text, data) {
-  var CONFIG, DATA, INFO;
+  var CONFIG, DATA, STREAM_OFFLINE, STREAM_ONLINE;
   CONFIG = ini.parse(fs.readFileSync("./data/config.ini", 'utf-8'));
-  INFO = JSON.parse(requestAjax("https://api.twitch.tv/kraken/streams/" + CONFIG.USER.chanel, "GET"));
+  STREAM_ONLINE = JSON.parse(requestAjax("https://api.twitch.tv/kraken/streams/" + CONFIG.USER.chanel, "GET"));
   DATA = data.data;
-  text = text.toString().replace("${title}", INFO.stream.channel.status).replace("${game}", INFO.stream.game).replace("${resolution}", INFO.stream.video_height).replace("${fps}", Math.round(INFO.stream.average_fps)).replace("${lang}", INFO.stream.channel.language).replace("${id}", INFO.stream._id).replace("${viewer}", INFO.stream.viewers).replace("${follower}", INFO.stream.channel.followers).replace("${views}", INFO.stream.channel.views).replace("${lang_s}", INFO.stream.channel.broadcaster_language).replace("${streamer}", INFO.stream.channel.display_name).replace("${url}", INFO.stream.channel.url).replace("${username}", DATA.username);
+  if (STREAM_ONLINE.stream) {
+    text = text.toString().replace("${stream title}", STREAM_ONLINE.channel.status).replace("${stream game}", STREAM_ONLINE.game).replace("${stream resolution}", STREAM_ONLINE.stream.video_height).replace("${stream fps}", MATH.round(STREAM_ONLINE.stream.average_fps)).replace("${stream lang}", STREAM_ONLINE.stream.channel.language).replace("${stream id}", STREAM_ONLINE.stream._id).replace("${brodcaster}", STREAM_ONLINE.stream.channel.display_name).replace("${brodcaster viewer}", STREAM_ONLINE.stream.viewers).replace("${brodcaster follower}", STREAM_ONLINE.stream.channel.followers).replace("${brodcaster views}", STREAM_ONLINE.stream.channel.views).replace("${brodcaster lang}", STREAM_ONLINE.stream.channel.broadcaster_language).replace("${brodcaster url}", STREAM_ONLINE.stream.channel.url).replace("${username}", function() {
+      if (DATA.username) {
+        return DATA.username;
+      } else if (!DATA.username) {
+        return "undefined";
+      }
+    }).replace("${username follower}", function() {
+      var USER;
+      if (DATA.username) {
+        USER = JSON.parse(requestAjax("https://api.twitch.tv/kraken/channels/" + DATA.username, "GET"));
+        return USER.followers;
+      } else if (!DATA.username) {
+        return "";
+      }
+    }).replace("${username views}", function() {
+      var USER;
+      if (DATA.username) {
+        USER = JSON.parse(requestAjax("https://api.twitch.tv/kraken/channels/" + DATA.username, "GET"));
+        return USER.views;
+      } else if (!DATA.username) {
+        return "";
+      }
+    }).replace("${username url}", function() {
+      var USER;
+      if (DATA.username) {
+        USER = JSON.parse(requestAjax("https://api.twitch.tv/kraken/channels/" + DATA.username, "GET"));
+        return USER.url;
+      } else if (!DATA.username) {
+        return "";
+      }
+    }).replace("${username lang}", function() {
+      var USER;
+      if (DATA.username) {
+        USER = JSON.parse(requestAjax("https://api.twitch.tv/kraken/channels/" + DATA.username, "GET"));
+        return USER.language;
+      } else if (!DATA.username) {
+        return "";
+      }
+    });
+  } else {
+    STREAM_OFFLINE = JSON.parse(requestAjax("https://api.twitch.tv/kraken/channels/" + CONFIG.USER.chanel, "GET"));
+    text = text.toString().replace("${stream title}", STREAM_OFFLINE.status).replace("${stream game}", STREAM_OFFLINE.game).replace("${stream resolution}", "").replace("${stream fps}", "").replace("${stream lang}", STREAM_OFFLINE.language).replace("${stream id}", "").replace("${brodcaster}", STREAM_OFFLINE.display_name).replace("${brodcaster viewer}", "0").replace("${brodcaster follower}", STREAM_OFFLINE.followers).replace("${brodcaster views}", STREAM_OFFLINE.views).replace("${brodcaster lang}", STREAM_OFFLINE.broadcaster_language).replace("${brodcaster url}", STREAM_OFFLINE.url).replace("${username}", function() {
+      if (DATA.username) {
+        return DATA.username;
+      } else if (!DATA.username) {
+        return "undefined";
+      }
+    }).replace("${username follower}", function() {
+      var USER;
+      if (DATA.username) {
+        USER = JSON.parse(requestAjax("https://api.twitch.tv/kraken/channels/" + DATA.username, "GET"));
+        return USER.followers;
+      } else if (!DATA.username) {
+        return "";
+      }
+    }).replace("${username views}", function() {
+      var USER;
+      if (DATA.username) {
+        USER = JSON.parse(requestAjax("https://api.twitch.tv/kraken/channels/" + DATA.username, "GET"));
+        return USER.views;
+      } else if (!DATA.username) {
+        return "";
+      }
+    }).replace("${username url}", function() {
+      var USER;
+      if (DATA.username) {
+        USER = JSON.parse(requestAjax("https://api.twitch.tv/kraken/channels/" + DATA.username, "GET"));
+        return USER.url;
+      } else if (!DATA.username) {
+        return "";
+      }
+    }).replace("${username lang}", function() {
+      var USER;
+      if (DATA.username) {
+        USER = JSON.parse(requestAjax("https://api.twitch.tv/kraken/channels/" + DATA.username, "GET"));
+        return USER.language;
+      } else if (!DATA.username) {
+        return "";
+      }
+    });
+  }
   return text;
 };
 
@@ -91,7 +172,7 @@ expressApp.get("/GET/data/command/", function(req, res) {
 expressApp.get("/GET/data/follower/", function(req, res) {
   var iniFile;
   iniFile = ini.parse(fs.readFileSync("./data/stats/follower.ini", 'utf-8'));
-  iniFile.INFO.follower = VarToText("${follower}", {
+  iniFile.INFO.follower = VarToText("${brodcaster follower}", {
     data: {
       username: ""
     }
@@ -103,7 +184,7 @@ expressApp.get("/GET/data/follower/", function(req, res) {
 expressApp.get("/GET/data/viewer/", function(req, res) {
   var iniFile;
   iniFile = ini.parse(fs.readFileSync("./data/stats/follower.ini", 'utf-8'));
-  iniFile.INFO.viewer = VarToText("${viewer}", {
+  iniFile.INFO.viewer = VarToText("${brodcaster viewer}", {
     data: {
       username: ""
     }
