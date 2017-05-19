@@ -19,7 +19,7 @@ indispensable pour une meilleure lecture du code sur la branch [develop](https:/
   - [x] Fichier de langue [FRA.ini](/data/lang/FRA.ini)
   - [ ] Fichier de langue GER.ini
   - [ ] Fichier de langue ENG.ini
-  - [ ] Fichier de langue ITA.ini
+  - [x] Fichier de langue [ITA.ini](/data/lang/ITA.ini) [#2](https://github.com/volca780/TwitchBotStream/issues/2)
 
 ## Installation
 
@@ -90,15 +90,110 @@ VarToText = (text, data) ->
   .replace("${username}", DATA.username)
 ```
 
-## Information
-L'utilisation de `CoffeeScript` est importante pour pouvoir réduire notre code de façon considérable. Voici quelque exemple:
-```coffeescript
-languageInit: -> #CHANGE LANGUAGE IN HTML CODE
-  @LANGUAGE = JSON.parse @requestAjax get_url_lang, "GET"
-  @CONFIG   = JSON.parse @requestAjax get_url_config, "GET"
+## Langage
+Pour changer le langage du bot, il vous suffit d'acceder au fichier [config.ini](/data/config.ini) pour modifier le contenu de la variable ```lang``` les langues disponible:
+  - **FRA**
+  - **ITA**
 
-  try document.getElementById("lang_install_next").innerHTML          = @LANGUAGE.LANGUAGE.lang_install_next
-  try document.getElementById("lang_install_install").innerHTML       = @LANGUAGE.LANGUAGE.lang_install_install
-  try document.getElementById("lang_install_installing").innerHTML    = @LANGUAGE.LANGUAGE.lang_install_installing
-  try document.getElementById("lang_install_presentation").innerHTML  = @LANGUAGE.LANGUAGE.lang_install_presentation
+```ini
+[OPTION]
+lang=FRA
+```
+Le code du langage est juste ici:
+```coffeescript
+languageInit: ->
+  @LANGUAGE = JSON.parse @requestAjax get_url_lang, "GET"
+  @CONFIG = JSON.parse @requestAjax get_url_config, "GET"
+
+  try document.getElementById("lang_install_next").innerHTML                        = @LANGUAGE.LANGUAGE.lang_install_next
+  try document.getElementById("lang_install_install").innerHTML                     = @LANGUAGE.LANGUAGE.lang_install_install
+  try document.getElementById("lang_install_installing").innerHTML                  = @LANGUAGE.LANGUAGE.lang_install_installing
+  try document.getElementById("lang_install_presentation").innerHTML                = @LANGUAGE.LANGUAGE.lang_install_presentation
+  try document.getElementById("lang_install_bot_game").innerHTML                    = @LANGUAGE.LANGUAGE.lang_install_bot_game
+  try document.getElementById("lang_install_bot_spam").innerHTML                    = @LANGUAGE.LANGUAGE.lang_install_bot_spam
+  try document.getElementById("lang_install_bot_mods").innerHTML                    = @LANGUAGE.LANGUAGE.lang_install_bot_mods
+  try document.getElementById("lang_install_bot_blacklist").innerHTML               = @LANGUAGE.LANGUAGE.lang_install_bot_blacklist
+  try document.getElementById("lang_install_select_chanel").innerHTML               = @LANGUAGE.LANGUAGE.lang_install_select_chanel
+  try document.getElementById("lang_install_select_user").innerHTML                 = @LANGUAGE.LANGUAGE.lang_install_select_user
+  try document.getElementById("lang_install_user").innerHTML                        = @LANGUAGE.LANGUAGE.lang_install_user
+  try document.getElementById("lang_install_password").innerHTML                    = @LANGUAGE.LANGUAGE.lang_install_password
+  try document.getElementById("lang_install_bot_edit").innerHTML                    = @LANGUAGE.LANGUAGE.lang_install_bot_edit
+  try document.getElementById("lang_install_bot_color").innerHTML                   = @LANGUAGE.LANGUAGE.lang_install_bot_color
+  try document.getElementById("lang_install_success").innerHTML                     = @LANGUAGE.LANGUAGE.lang_install_success
+  try document.getElementById("lang_install_administration").innerHTML              = @LANGUAGE.LANGUAGE.lang_install_administration
+  try document.getElementById("lang_admin_administration").innerHTML                = @LANGUAGE.LANGUAGE.lang_admin_administration
+  try document.getElementById("lang_nav_statistic").innerHTML                       = @LANGUAGE.LANGUAGE.lang_nav_statistic
+  try document.getElementById("lang_nav_command").innerHTML                         = @LANGUAGE.LANGUAGE.lang_nav_command
+  try document.getElementById("lang_nav_title").innerHTML                           = @LANGUAGE.LANGUAGE.lang_nav_title
+  try document.getElementById("lang_nav_admin").innerHTML                           = @LANGUAGE.LANGUAGE.lang_nav_admin
+  try document.getElementById("lang_panel_admin").innerHTML                         = @LANGUAGE.LANGUAGE.lang_panel_admin
+  try document.getElementById("lang_panel_bot_start").innerHTML                     = @LANGUAGE.LANGUAGE.lang_panel_bot_start
+  try document.getElementById("lang_panel_bot_stop").innerHTML                      = @LANGUAGE.LANGUAGE.lang_panel_bot_stop
+  try document.getElementById("lang_panel_bot_color").innerHTML                     = @LANGUAGE.LANGUAGE.lang_panel_bot_color
+  try document.getElementById("lang_panel_bot_color_hex").innerHTML                 = @LANGUAGE.LANGUAGE.lang_panel_bot_color_hex
+  try document.getElementById("lang_panel_bot_color_save").innerHTML                = @LANGUAGE.LANGUAGE.lang_panel_bot_color_save
+  try document.getElementById("lang_panel_command_event").innerHTML                 = @LANGUAGE.LANGUAGE.lang_panel_command_event
+  try document.getElementById("lang_panel_command_method_me").innerHTML             = @LANGUAGE.LANGUAGE.lang_panel_command_method_me
+  try document.getElementById("lang_panel_command_method_chat").innerHTML           = @LANGUAGE.LANGUAGE.lang_panel_command_method_chat
+  try document.getElementById("lang_panel_command_method_whisper").innerHTML        = @LANGUAGE.LANGUAGE.lang_panel_command_method_whisper
+  try document.getElementById("lang_panel_command_action_join").innerHTML           = @LANGUAGE.LANGUAGE.lang_panel_command_action_join
+  try document.getElementById("lang_panel_command_action_leave").innerHTML          = @LANGUAGE.LANGUAGE.lang_panel_command_action_leave
+  try document.getElementById("lang_panel_command_command").innerHTML               = @LANGUAGE.LANGUAGE.lang_panel_command_command
+  try document.getElementById("lang_panel_command_add").innerHTML                   = @LANGUAGE.LANGUAGE.lang_panel_command_add
+  try document.getElementById("lang_panel_command_command_add").innerHTML           = @LANGUAGE.LANGUAGE.lang_panel_command_command_add
+  try document.getElementById("lang_panel_command_event_me").innerHTML              = @LANGUAGE.LANGUAGE.lang_panel_command_event_me
+  try document.getElementById("lang_panel_command_event_chat").innerHTML            = @LANGUAGE.LANGUAGE.lang_panel_command_event_chat
+  try document.getElementById("lang_panel_command_event_whisper").innerHTML         = @LANGUAGE.LANGUAGE.lang_panel_command_event_whisper
+  try document.getElementById("lang_panel_command_command_command").innerHTML       = @LANGUAGE.LANGUAGE.lang_panel_command_command_command
+  try document.getElementById("lang_panel_command_command_result").innerHTML        = @LANGUAGE.LANGUAGE.lang_panel_command_command_result
+  try document.getElementById("lang_panel_command_command_option").innerHTML        = @LANGUAGE.LANGUAGE.lang_panel_command_command_option
+  try document.getElementById("lang_panel_command_event_event").innerHTML           = @LANGUAGE.LANGUAGE.lang_panel_command_event_event
+  try document.getElementById("lang_panel_command_event_method").innerHTML          = @LANGUAGE.LANGUAGE.lang_panel_command_event_method
+  try document.getElementById("lang_panel_command_event_result").innerHTML          = @LANGUAGE.LANGUAGE.lang_panel_command_event_result
+  try document.getElementById("lang_panel_command_event_option").innerHTML          = @LANGUAGE.LANGUAGE.lang_panel_command_event_option
+  try document.getElementById("lang_panel_command_command_owner").innerHTML         = @LANGUAGE.LANGUAGE.lang_panel_command_command_owner
+  try document.getElementById("lang_panel_command_command_user").innerHTML          = @LANGUAGE.LANGUAGE.lang_panel_command_command_user
+  try document.getElementById("lang_panel_command_command_modo").innerHTML          = @LANGUAGE.LANGUAGE.lang_panel_command_command_modo
+  try document.getElementById("lang_panel_stats").innerHTML                         = @LANGUAGE.LANGUAGE.lang_panel_stats
+  try document.getElementById("lang_panel_stats_follower").innerHTML                = @LANGUAGE.LANGUAGE.lang_panel_stats_follower
+  try document.getElementById("lang_panel_stats_viewer").innerHTML                  = @LANGUAGE.LANGUAGE.lang_panel_stats_viewer
+  try document.getElementById("lang_panel_stats_message").innerHTML                 = @LANGUAGE.LANGUAGE.lang_panel_stats_message
+  try document.getElementById("lang_panel_stats_sondage").innerHTML                 = @LANGUAGE.LANGUAGE.lang_panel_stats_sondage
+  try document.getElementById("lang_panel_stats_form_question").innerHTML           = @LANGUAGE.LANGUAGE.lang_panel_stats_form_question
+  try document.getElementById("lang_panel_stats_form_question_add").innerHTML       = @LANGUAGE.LANGUAGE.lang_panel_stats_form_question_add
+  try document.getElementById("lang_panel_stats_form_reponse").innerHTML            = @LANGUAGE.LANGUAGE.lang_panel_stats_form_reponse
+  try document.getElementById("lang_panel_stats_form_reponse_add").innerHTML        = @LANGUAGE.LANGUAGE.lang_panel_stats_form_reponse_add
+  try document.getElementById("lang_panel_stats_table_question").innerHTML          = @LANGUAGE.LANGUAGE.lang_panel_stats_table_question
+  try document.getElementById("lang_panel_stats_table_reponse").innerHTML           = @LANGUAGE.LANGUAGE.lang_panel_stats_table_reponse
+
+  try document.getElementById("config_bot_name").innerHTML                          = @CONFIG.USER.username
+```
+
+## Bug commun
+Cette section est dédiée au bug les plus commun sur l'application
+
+>Probleme: ```npm WARN twitchbotstream@x.x.x No repository field.```
+
+>Solution: [#1](https://github.com/volca780/TwitchBotStream/issues/1)
+
+## Information
+L'utilisation de `CoffeeScript` est importante pour pouvoir réduire notre code de façon considérable. Voici un exemple:
+```coffeescript
+@COMMAND = JSON.parse @requestAjax get_url_command, "GET"
+n = 0
+while n < Object.keys(@COMMAND).length
+  console.log @COMMAND[Object.keys(@COMMAND)[n]]
+  document.getElementById("panel_command_command_table").innerHTML += """
+  <tr>
+    <td>#{@COMMAND[Object.keys(@COMMAND)[n]]['command']}</td>
+    <td>#{@COMMAND[Object.keys(@COMMAND)[n]]['method']}</td>
+    <td>#{@COMMAND[Object.keys(@COMMAND)[n]]['message']}</td>
+    <td>#{if @COMMAND[Object.keys(@COMMAND)[n]]['user_user'] then """<i class="fa fa-check" aria-hidden="true"></i>""" else """<i class="fa fa-times" aria-hidden="true"></i>"""}</td>
+    <td>#{if @COMMAND[Object.keys(@COMMAND)[n]]['user_moderat'] then """<i class="fa fa-check" aria-hidden="true"></i>""" else """<i class="fa fa-times" aria-hidden="true"></i>"""}</td>
+    <td>#{if @COMMAND[Object.keys(@COMMAND)[n]]['user_stramer'] then """<i class="fa fa-check" aria-hidden="true"></i>""" else """<i class="fa fa-times" aria-hidden="true"></i>"""}</td>
+    <td><i class="fa fa-trash" aria-hidden="true"></i> <i class="fa fa-check-circle-o" aria-hidden="true"></i></td>
+  </tr>
+  """
+  n++
+
 ```
