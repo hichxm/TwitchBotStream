@@ -9,6 +9,7 @@ fs = require "fs"
 sha1 = require "sha1"
 XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest
 tmi = require "tmi.js"
+
 # ========================== #
 # CheckBotStart() return     #
 # true -> Bot Started        #
