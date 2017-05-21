@@ -18,7 +18,8 @@ indispensable pour une meilleure lecture du code sur la branch [develop](https:/
 - Tâche publique:
   - [x] Fichier de langue [FRA.ini](/data/lang/FRA.ini)
   - [ ] Fichier de langue GER.ini
-  - [ ] Fichier de langue ENG.ini
+  - [x] Fichier de langue [ENG.ini](data/lang/ENG.ini)
+  - [x] Fichier de langue [TUR.ini](data/lang/TUR.ini)
   - [x] Fichier de langue [ITA.ini](/data/lang/ITA.ini) [#2](https://github.com/volca780/TwitchBotStream/issues/2)
 
 ## Installation
